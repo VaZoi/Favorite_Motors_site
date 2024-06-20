@@ -1,0 +1,13 @@
+php_FavoriteMotors is databse name
+
+tables are motors, categorie: motor bijv tour of sport, brand, motorlicense, status,
+
+motors is motor_id PK, category_id FK to category table, brand_id FK to brands table, motorlicense_id FK to motorlicences table, status_id FK to status table, price, cc, pk, kw, seat hight, images, weight
+
+category table is category_id PK, category like tour sport urban etc. 
+
+brands table is brand_id PK, brand name
+
+motorlicence table is motorlicence_id PK, motorlicence name is a1 a2 or a
+
+status table is status_id PK, status like active, disabled etc.
