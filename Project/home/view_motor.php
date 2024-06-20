@@ -50,8 +50,8 @@ if (isset($_GET['id'])) {
                 <p><strong>Price: </strong>&#8364;<?php echo htmlspecialchars($motor_details['price']); ?></p>
             </ul>
         </div>
+        <h3>Images</h3>
         <div class="motor-images">
-            <h3>Images</h3>
             <?php if (!empty($motor_images)): ?>
                 <?php foreach ($motor_images as $image): ?>
                     <img src="<?php echo htmlspecialchars($image['image_path']); ?>" alt="<?php echo htmlspecialchars($motor_details['brand_name'] . ' ' . $motor_details['name']); ?>" style="max-width: 200px; margin: 10px;" class="thumbnail">
