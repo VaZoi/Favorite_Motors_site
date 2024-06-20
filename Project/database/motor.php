@@ -191,5 +191,27 @@ class Motor
             return false;
         }
     }
+
+    public function searchMotors($searchTerm)
+    {
+        $query = "
+            SELECT m.*, c.category as category_name, b.brand_name as brand_name, s.status as status_name, l.motorlicense_name as motorlicense_name
+            FROM $this->motortable m
+            LEFT JOIN category c ON m.category_id = c.category_id
+            LEFT JOIN brands b ON m.brand_id = b.brand_id
+            LEFT JOIN status s ON m.status_id = s.status_id
+            LEFT JOIN motorlicenses l ON m.motorlicense_id = l.motorlicense_id
+            WHERE m.name LIKE :searchTerm OR b.brand_name LIKE :searchTerm";
+
+        $params = [':searchTerm' => "%$searchTerm%"];
+
+        try {
+            $stmt = $this->dbh->run($query, $params);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Failed to search motors: ' . $e->getMessage());
+            return [];
+        }
+    }
     
 }

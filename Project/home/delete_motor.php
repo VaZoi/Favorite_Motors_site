@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="form-container">
             <form method="POST">
-                <p>Are you sure you want to delete the motor <strong><?php echo htmlspecialchars($motor['name']); ?></strong> and all its associated images?</p>
+                <p>Are you sure you want to delete the motor <strong><?php echo htmlspecialchars($motor['brand_name']) . ' ' . htmlspecialchars($motor['name']); ?></strong> and all its associated images?</p>
                 <div class="form-group">
                     <button type="submit">Delete Motor</button>
                     <a href="motors.php" class="delete-button">Cancel</a>

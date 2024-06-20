@@ -9,6 +9,11 @@ $other = new Other($db);
 $motors = $motorModel->getMotors();
 $categories = $other->getCategories();
 $statuses = $other->getStatuses();
+
+if (isset($_GET['search'])) {
+    $searchTerm = $_GET['search'];
+    $motors = $motorModel->searchMotors($searchTerm);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,8 +22,12 @@ $statuses = $other->getStatuses();
     <title>Motors Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel="stylesheet" href="../style/css/style.css">
+    <link rel="stylesheet" href="../style/css/view_motor.css">
+    <link rel="stylesheet" href="../style/css/motors.css">
     <script src="../style/javascript/script.js" defer></script>
     <script src="../style/javascript/navbar.js" defer></script>
+    <script src="../style/javascript/view_motor.js" defer></script>
+    <script src="../style/javascript/motors.js" defer></script>
 </head>
 <body>
 <div class="app-container">
@@ -28,6 +37,10 @@ $statuses = $other->getStatuses();
             <h1 class="app-content-headerText">Motors</h1>
             <a href="add_motor.php"><button class="app-content-headerButton">Add Motor</button></a>
         </div>
+        <form class="search-form" action="" method="GET">
+            <input type="text" name="search" placeholder="Search by name or brand..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+            <input type="submit" value="Search">
+        </form>
         <div class="app-content-actions">
         <div class="products-area-wrapper tableView">
             <div class="products-header">
@@ -52,7 +65,7 @@ $statuses = $other->getStatuses();
                     echo "<div class='product-cell image'>";
                     $images = $motorModel->getMotorImages($motor['motor_id']);
                     $image = !empty($images) ? $images[0]['image_path'] : 'default_image_path';
-                    echo "<img src='{$image}' alt='Motor Image' style='width:100px;height:100px;'>";
+                    echo "<img src='{$image}' alt='" . htmlspecialchars($motor['brand_name'] . ' ' . $motor['name']) . "' style='width:100px;height:100px;' class='thumbnail'>";
                     echo "</div>";
                     echo "<div class='product-cell stock'><span>{$motor['name']}</span></div>";
                     echo "<div class='product-cell category'><span>{$motor['category_name']}</span></div>";
@@ -82,6 +95,11 @@ $statuses = $other->getStatuses();
             </div>
         </div>
     </div>
+</div>
+<div id="myModal" class="modal">
+  <span class="close">&times;</span>
+  <img class="modal-content" id="img01">
+  <div id="caption"></div>
 </div>
 </body>
 </html>
