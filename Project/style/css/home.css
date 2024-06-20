@@ -1,0 +1,40 @@
+
+.all-cards {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+
+.card {
+    background-color: #2869ff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    text-decoration: none;
+    color: #fff;
+    margin: 20px;
+}
+
+.card:hover {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    background-color: #1453e6;
+}
+
+.card p {
+    margin: 0;
+    font-size: 18px;
+}
+
+img {
+    object-fit:cover;
+    width: 1000px;
+    height: 1000px;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}

@@ -1,0 +1,44 @@
+.form-container {
+    max-width: 600px; /* Adjust as needed */
+    margin: auto;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-weight: bold;
+}
+
+select, input[type="file"], button {
+    width: 100%;
+    padding: 8px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+select {
+    width: calc(100% - 2px);
+}
+
+button {
+    background-color: #2869ff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0647df;
+}
+
+input:invalid {
+    border-color: red;
+}
