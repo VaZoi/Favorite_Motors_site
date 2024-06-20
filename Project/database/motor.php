@@ -109,4 +109,87 @@ class Motor
             return 0;
         }
     }
+
+    public function updateMotor($motor_id, $name, $category_id, $status_id, $brand_id, $motorlicense_id, $cc, $pk, $kw, $seat_height, $weight, $price) {
+        $query = "
+            UPDATE $this->motortable 
+            SET name = :name, 
+                category_id = :category_id, 
+                status_id = :status_id, 
+                brand_id = :brand_id, 
+                motorlicense_id = :motorlicense_id, 
+                cc = :cc, 
+                pk = :pk, 
+                kw = :kw, 
+                seat_height = :seat_height, 
+                weight = :weight, 
+                price = :price
+            WHERE motor_id = :motor_id";
+    
+        $params = [
+            ':motor_id' => $motor_id,
+            ':name' => $name,
+            ':category_id' => $category_id,
+            ':status_id' => $status_id,
+            ':brand_id' => $brand_id,
+            ':motorlicense_id' => $motorlicense_id,
+            ':cc' => $cc,
+            ':pk' => $pk,
+            ':kw' => $kw,
+            ':seat_height' => $seat_height,
+            ':weight' => $weight,
+            ':price' => $price,
+        ];
+    
+        try {
+            $stmt = $this->dbh->run($query, $params);
+            return true;
+        } catch (PDOException $e) {
+            error_log('Failed to update motor: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function getImagesByMotorId($motor_id)
+    {
+        $query = "SELECT * FROM $this->imagetable WHERE motor_id = :motor_id";
+        $params = [':motor_id' => $motor_id];
+
+        try {
+            $stmt = $this->dbh->run($query, $params);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Failed to fetch motor images: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function deleteImagesByMotorId($motor_id)
+    {
+        $query = "DELETE FROM $this->imagetable WHERE motor_id = :motor_id";
+        $params = [':motor_id' => $motor_id];
+
+        try {
+            $stmt = $this->dbh->run($query, $params);
+            return true;
+        } catch (PDOException $e) {
+            error_log('Failed to delete motor images: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function deleteMotor($motor_id)
+    {
+        $query = "DELETE FROM $this->motortable WHERE motor_id = :motor_id";
+        $params = [':motor_id' => $motor_id];
+
+        try {
+            $stmt = $this->dbh->run($query, $params);
+            return true;
+        } catch (PDOException $e) {
+            error_log('Failed to delete motor: ' . $e->getMessage());
+            return false;
+        }
+    }
+    
 }

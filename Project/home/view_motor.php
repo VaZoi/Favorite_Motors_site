@@ -37,7 +37,7 @@ if (isset($_GET['id'])) {
             <h1 class="app-content-headerText">View Motor</h1>
         </div>
         <div class="motor-details">
-            <h2><?php echo htmlspecialchars($motor_details['name']); ?></h2>
+            <h2><?php echo htmlspecialchars($motor_details['brand_name']) . ' ' . htmlspecialchars($motor_details['name']); ?></h2>
             <ul>
                 <p><strong>Category:</strong> <?php echo htmlspecialchars($motor_details['category_name']); ?></p>
                 <p><strong>Brand:</strong> <?php echo htmlspecialchars($motor_details['brand_name']); ?></p>
@@ -46,7 +46,7 @@ if (isset($_GET['id'])) {
                 <p><strong>PK:</strong> <?php echo htmlspecialchars($motor_details['pk']); ?></p>
                 <p><strong>KW:</strong> <?php echo htmlspecialchars($motor_details['kw']); ?></p>
                 <p><strong>Seat Height:</strong> <?php echo htmlspecialchars($motor_details['seat_height']); ?></p>
-                <p><strong>Weight:</strong> <?php echo htmlspecialchars($motor_details['weight']); ?></p>
+                <p><strong>Weight:</strong> <?php echo htmlspecialchars($motor_details['weight']); ?> kg</p>
                 <p><strong>Price: </strong>&#8364;<?php echo htmlspecialchars($motor_details['price']); ?></p>
             </ul>
         </div>
