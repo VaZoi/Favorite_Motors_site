@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (isset($_FILES["images"])) {
         $uploadDir = "../uploads/";
-        $allowedExtensions = array("jpg", "jpeg", "png", "gif");
+        $allowedExtensions = array("jpg", "jpeg", "png", "gif", "webp");
 
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
 
                 if (!in_array($extension, $allowedExtensions)) {
-                    die("Error: Only JPG, JPEG, PNG, and GIF files are allowed.");
+                    die("Error: Only JPG, JPEG, PNG, WEBP and GIF files are allowed.");
                 }
 
                 $destination = $uploadDir . uniqid() . '_' . $name;
