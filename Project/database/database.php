@@ -32,10 +32,5 @@ class Database
         $stmt->execute($args);
         return $stmt;
     }
-
-    public function lastId()
-    {
-        return $this->dbh->lastInsertId();
-    }
 }
 
