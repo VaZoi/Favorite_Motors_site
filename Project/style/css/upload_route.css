@@ -1,0 +1,78 @@
+/* Form Container Styles */
+.app-content {
+    background-color: var(--app-content-secondary-color); /* Use your secondary color for contrast */
+    padding: 20px; /* Add some padding for better spacing */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    max-width: 600px; /* Limit the width of the form */
+    margin: 20px auto; /* Center the form on the page */
+}
+
+/* Header Styles */
+.app-content h1 {
+    color: var(--app-content-main-color); /* Main color for text */
+    font-size: 24px; /* Large font size for the header */
+    margin-bottom: 20px; /* Space below the header */
+    text-align: center; /* Center the header text */
+}
+
+/* Label Styles */
+.app-content label {
+    color: var(--sidebar-link); /* Use link color for labels */
+    font-weight: 500; /* Slightly bolder text */
+    display: block; /* Each label should take a full line */
+    margin-bottom: 8px; /* Space below each label */
+}
+
+/* Input and Textarea Styles */
+.app-content input[type="text"],
+.app-content textarea,
+.app-content input[type="file"] {
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding for comfort */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 4px; /* Rounded corners */
+    margin-bottom: 16px; /* Space below each input */
+    font-size: 16px; /* Font size for better readability */
+    background-color: #fff; /* White background for inputs */
+}
+
+/* Input Styles on Focus */
+.app-content input[type="text"]:focus,
+.app-content textarea:focus,
+.app-content input[type="file"]:focus {
+    border-color: var(--action-color); /* Change border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+/* Submit Button Styles */
+.app-content input[type="submit"] {
+    background-color: var(--action-color); /* Use action color for button */
+    color: #fff; /* White text for button */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 10px 16px; /* Padding for button */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size */
+    transition: background-color 0.2s; /* Smooth transition */
+}
+
+/* Submit Button Hover Effect */
+.app-content input[type="submit"]:hover {
+    background-color: var(--action-color-hover); /* Change to hover color */
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .app-content {
+        padding: 15px; /* Adjust padding for smaller screens */
+    }
+
+    .app-content h1 {
+        font-size: 20px; /* Adjust font size for header */
+    }
+
+    .app-content input[type="submit"] {
+        width: 100%; /* Full width for the button on small screens */
+    }
+}
