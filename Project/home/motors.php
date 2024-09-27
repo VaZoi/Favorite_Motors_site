@@ -66,7 +66,7 @@ if (isset($_GET['search'])) {
                     echo "<div class='products-row'>";
                     echo "<div class='product-cell stock'>
                             <button class='like-button' data-motor-id='{$motor["motor_id"]}'>
-                                Like ({$motor['likes']})
+                                {$motor['likes']}
                             </button>
                         </div>";
                     echo "<div class='product-cell image'>";
