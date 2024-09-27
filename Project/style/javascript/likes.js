@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    this.textContent = `Like (${data.likes})`;
+                    this.textContent = `${data.likes}`;
                 } else {
                     alert('Failed to like the motor.');
                 }

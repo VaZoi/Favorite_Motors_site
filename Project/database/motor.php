@@ -11,17 +11,6 @@ class Motor
         $this->dbh = $dbh;
     }
 
-    public function getMotors() {
-        $query = "
-            SELECT m.*, c.category as category_name, b.brand_name as brand_name, s.status as status_name, l.motorlicense_name as motorlicense_name
-            FROM $this->motortable m
-            LEFT JOIN category c ON m.category_id = c.category_id
-            LEFT JOIN brands b ON m.brand_id = b.brand_id
-            LEFT JOIN status s ON m.status_id = s.status_id
-            LEFT JOIN motorlicenses l ON m.motorlicense_id = l.motorlicense_id";
-        return $this->dbh->run($query)->fetchAll(PDO::FETCH_ASSOC);
-    }
-
     public function addMotorImage($motor_id, $image_path)
     {
         $query = "INSERT INTO $this->imagetable (motor_id, image_path) VALUES (:motor_id, :image_path)";
@@ -201,7 +190,8 @@ class Motor
             LEFT JOIN brands b ON m.brand_id = b.brand_id
             LEFT JOIN status s ON m.status_id = s.status_id
             LEFT JOIN motorlicenses l ON m.motorlicense_id = l.motorlicense_id
-            WHERE m.name LIKE :searchTerm OR b.brand_name LIKE :searchTerm";
+            WHERE m.name LIKE :searchTerm OR b.brand_name LIKE :searchTerm
+            ORDER BY m.likes DESC";
 
         $params = [':searchTerm' => "%$searchTerm%"];
 
@@ -213,6 +203,7 @@ class Motor
             return [];
         }
     }
+
 
     public function addLike($motor_id) {
         $query = "UPDATE $this->motortable SET likes = likes + 1 WHERE motor_id = :motor_id";

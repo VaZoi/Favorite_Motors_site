@@ -3,4 +3,5 @@ const form = document.querySelector('.search-form');
         e.preventDefault();
         const searchTerm = document.querySelector('input[name="search"]').value;
         window.location.href = `motors.php?search=${encodeURIComponent(searchTerm)}`;
-    });
+});
+
