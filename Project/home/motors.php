@@ -6,7 +6,7 @@ require '../database/motor.php';
 $db = new Database();
 $motorModel = new Motor($db);
 $other = new Other($db);
-$motors = $motorModel->getMotors();
+$motors = $motorModel->getMotorsOrderedByLikes();
 $categories = $other->getCategories();
 $statuses = $other->getStatuses();
 
@@ -28,6 +28,7 @@ if (isset($_GET['search'])) {
     <script src="../style/javascript/navbar.js" defer></script>
     <script src="../style/javascript/view_motor.js" defer></script>
     <script src="../style/javascript/motors.js" defer></script>
+    <script src="../style/javascript/likes.js" defer></script>
 </head>
 <body>
 <div class="app-container">
@@ -44,6 +45,7 @@ if (isset($_GET['search'])) {
         <div class="app-content-actions">
         <div class="products-area-wrapper tableView">
             <div class="products-header">
+                <div class="product-cell stock">Likes</div>
                 <div class="product-cell image">Image</div>
                 <div class="product-cell stock">Name</div>
                 <div class="product-cell category">Category</div>
@@ -62,6 +64,11 @@ if (isset($_GET['search'])) {
                 <?php
                 foreach ($motors as $motor) {
                     echo "<div class='products-row'>";
+                    echo "<div class='product-cell stock'>
+                            <button class='like-button' data-motor-id='{$motor["motor_id"]}'>
+                                Like ({$motor['likes']})
+                            </button>
+                        </div>";
                     echo "<div class='product-cell image'>";
                     $images = $motorModel->getMotorImages($motor['motor_id']);
                     $image = !empty($images) ? $images[0]['image_path'] : 'default_image_path';

@@ -213,5 +213,38 @@ class Motor
             return [];
         }
     }
+
+    public function addLike($motor_id) {
+        $query = "UPDATE $this->motortable SET likes = likes + 1 WHERE motor_id = :motor_id";
+        $params = [':motor_id' => $motor_id];
+    
+        try {
+            $this->dbh->run($query, $params);
+            return true;
+        } catch (PDOException $e) {
+            error_log('Failed to add like: ' . $e->getMessage());
+            return false;
+        }
+    }
+    
+
+    public function getMotorsOrderedByLikes() {
+        $query = "
+            SELECT m.*, c.category as category_name, b.brand_name as brand_name, s.status as status_name, l.motorlicense_name as motorlicense_name
+            FROM $this->motortable m
+            LEFT JOIN category c ON m.category_id = c.category_id
+            LEFT JOIN brands b ON m.brand_id = b.brand_id
+            LEFT JOIN status s ON m.status_id = s.status_id
+            LEFT JOIN motorlicenses l ON m.motorlicense_id = l.motorlicense_id
+            ORDER BY m.likes DESC";
+        
+        try {
+            return $this->dbh->run($query)->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Failed to fetch motors ordered by likes: ' . $e->getMessage());
+            return [];
+        }
+    }
+
     
 }
