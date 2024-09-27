@@ -45,12 +45,12 @@ if (isset($_GET['id'])) {
                 <p><strong>CC:</strong> <?php echo htmlspecialchars($motor_details['cc']); ?></p>
                 <p><strong>PK:</strong> <?php echo htmlspecialchars($motor_details['pk']); ?></p>
                 <p><strong>KW:</strong> <?php echo htmlspecialchars($motor_details['kw']); ?></p>
-                <p><strong>Seat Height:</strong> <?php echo htmlspecialchars($motor_details['seat_height']); ?></p>
+                <p><strong>Seat Height:</strong> <?php echo htmlspecialchars($motor_details['seat_height']); ?> mm</p>
                 <p><strong>Weight:</strong> <?php echo htmlspecialchars($motor_details['weight']); ?> kg</p>
                 <p><strong>Price: </strong>&#8364;<?php echo htmlspecialchars($motor_details['price']); ?></p>
             </ul>
         </div>
-        <h3>Images</h3>
+        <h3 class="descript">Images</h3>
         <div class="motor-images">
             <?php if (!empty($motor_images)): ?>
                 <?php foreach ($motor_images as $image): ?>

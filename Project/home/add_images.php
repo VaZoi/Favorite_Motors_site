@@ -5,7 +5,7 @@ require '../database/motor.php';
 $db = new Database();
 $motor = new Motor($db);
 
-$motors = $motor->getMotors();
+$motors = $motor->getMotorsOrderedByLikes();
 ?>
 <!DOCTYPE html>
 <html lang="en">
