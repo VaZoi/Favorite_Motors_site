@@ -1,6 +1,7 @@
 <?php
 require '../database/database.php';
 require '../database/route.php';
+require '../secret.php';
 
 $db = new Database();
 $route = new Route($db);
@@ -18,7 +19,7 @@ $routes = $db->run("SELECT * FROM routes")->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="../style/css/view_route.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <script src="../style/javascript/navbar.js" defer></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqoGbh1ilGiKsvxNWOuOVSmhulWZro8v8" defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $secret ?>" defer></script>
 </head>
 <body>
 <div class="app-container">
