@@ -1,0 +1,19 @@
+.app-content {
+    padding: 16px;
+    background-color: var(--app-bg);
+    height: calc(100% - 32px); /* Adjust based on header/footer height */
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+  }
+  
+
+#map {
+    height: 100%; /* Ensures the map takes up the full height of its container */
+    width: 100%; /* Ensures the map takes up the full width of its container */
+    border-radius: 4px; /* Matches the border radius of other elements */
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 8px; /* Adds a subtle shadow for depth */
+  }
+  
