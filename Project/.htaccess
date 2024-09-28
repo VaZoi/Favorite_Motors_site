@@ -1,0 +1,6 @@
+RewriteEngine On
+
+# Redirect all requests for non-existent pages to the home page
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /test/Github/Favorite_Motors_site/Project/home/home.php [L,R=301]
