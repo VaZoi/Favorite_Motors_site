@@ -37,12 +37,12 @@ body {
 
 .app-container {
   border-radius: 4px;
-  width: 100%;
+  width: auto;
   height: 100%;
   display: flex;
   overflow: auto;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  max-width: 2000px;
+  max-width: auto;
   margin: 0 auto;
 }
 
