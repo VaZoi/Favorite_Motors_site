@@ -42,7 +42,8 @@ class Motor
         }
     }
 
-    public function addMotor($name, $category_id, $status_id, $brand_id, $motorlicense_id, $cc, $pk, $kw, $seat_height, $weight, $price) {
+    public function addMotor($name, $category_id, $status_id, $brand_id, $motorlicense_id, $cc, $pk, $kw, $seat_height, $weight, $price)
+    {
         $query = "
             INSERT INTO $this->motortable (name, category_id, status_id, brand_id, motorlicense_id, cc, pk, kw, seat_height, weight, price)
             VALUES (:name, :category_id, :status_id, :brand_id, :motorlicense_id, :cc, :pk, :kw, :seat_height, :weight, :price)";
@@ -73,9 +74,9 @@ class Motor
             LEFT JOIN brands b ON m.brand_id = b.brand_id
             LEFT JOIN status s ON m.status_id = s.status_id
             WHERE m.motor_id = :motor_id";
-        
+
         $params = [':motor_id' => $motor_id];
-        
+
         try {
             $stmt = $this->dbh->run($query, $params);
             return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -88,7 +89,7 @@ class Motor
     public function countMotors()
     {
         $query = "SELECT COUNT(*) as total FROM $this->motortable";
-        
+
         try {
             $stmt = $this->dbh->run($query);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -99,7 +100,8 @@ class Motor
         }
     }
 
-    public function updateMotor($motor_id, $name, $category_id, $status_id, $brand_id, $motorlicense_id, $cc, $pk, $kw, $seat_height, $weight, $price) {
+    public function updateMotor($motor_id, $name, $category_id, $status_id, $brand_id, $motorlicense_id, $cc, $pk, $kw, $seat_height, $weight, $price)
+    {
         $query = "
             UPDATE $this->motortable 
             SET name = :name, 
@@ -114,7 +116,7 @@ class Motor
                 weight = :weight, 
                 price = :price
             WHERE motor_id = :motor_id";
-    
+
         $params = [
             ':motor_id' => $motor_id,
             ':name' => $name,
@@ -129,7 +131,7 @@ class Motor
             ':weight' => $weight,
             ':price' => $price,
         ];
-    
+
         try {
             $stmt = $this->dbh->run($query, $params);
             return true;
@@ -181,17 +183,20 @@ class Motor
         }
     }
 
-    public function searchMotors($searchTerm)
+    public function searchMotors($searchTerm, $column = '', $order = 'ASC')
     {
+        $allowedSortColumns = ['weight', 'seat_height', 'price'];
+        $columnSql = in_array($column, $allowedSortColumns) ? "ORDER BY $column $order" : "ORDER BY m.likes DESC";
+
         $query = "
-            SELECT m.*, c.category as category_name, b.brand_name as brand_name, s.status as status_name, l.motorlicense_name as motorlicense_name
-            FROM $this->motortable m
-            LEFT JOIN category c ON m.category_id = c.category_id
-            LEFT JOIN brands b ON m.brand_id = b.brand_id
-            LEFT JOIN status s ON m.status_id = s.status_id
-            LEFT JOIN motorlicenses l ON m.motorlicense_id = l.motorlicense_id
-            WHERE m.name LIKE :searchTerm OR b.brand_name LIKE :searchTerm
-            ORDER BY m.likes DESC";
+        SELECT m.*, c.category as category_name, b.brand_name as brand_name, s.status as status_name, l.motorlicense_name as motorlicense_name
+        FROM $this->motortable m
+        LEFT JOIN category c ON m.category_id = c.category_id
+        LEFT JOIN brands b ON m.brand_id = b.brand_id
+        LEFT JOIN status s ON m.status_id = s.status_id
+        LEFT JOIN motorlicenses l ON m.motorlicense_id = l.motorlicense_id
+        WHERE m.name LIKE :searchTerm OR b.brand_name LIKE :searchTerm
+        $columnSql";
 
         $params = [':searchTerm' => "%$searchTerm%"];
 
@@ -205,10 +210,11 @@ class Motor
     }
 
 
-    public function addLike($motor_id) {
+    public function addLike($motor_id)
+    {
         $query = "UPDATE $this->motortable SET likes = likes + 1 WHERE motor_id = :motor_id";
         $params = [':motor_id' => $motor_id];
-    
+
         try {
             $this->dbh->run($query, $params);
             return true;
@@ -217,9 +223,10 @@ class Motor
             return false;
         }
     }
-    
 
-    public function getMotorsOrderedByLikes() {
+
+    public function getMotorsOrderedByLikes()
+    {
         $query = "
             SELECT m.*, c.category as category_name, b.brand_name as brand_name, s.status as status_name, l.motorlicense_name as motorlicense_name
             FROM $this->motortable m
@@ -228,7 +235,7 @@ class Motor
             LEFT JOIN status s ON m.status_id = s.status_id
             LEFT JOIN motorlicenses l ON m.motorlicense_id = l.motorlicense_id
             ORDER BY m.likes DESC";
-        
+
         try {
             return $this->dbh->run($query)->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -237,5 +244,25 @@ class Motor
         }
     }
 
-    
+    public function getMotorsSorted($column, $order)
+    {
+        $allowedSortColumns = ['weight', 'seat_height', 'price'];
+        $columnSql = in_array($column, $allowedSortColumns) ? "ORDER BY $column $order" : "ORDER BY likes DESC";
+
+        $query = "
+        SELECT m.*, c.category as category_name, b.brand_name as brand_name, s.status as status_name, l.motorlicense_name as motorlicense_name
+        FROM $this->motortable m
+        LEFT JOIN category c ON m.category_id = c.category_id
+        LEFT JOIN brands b ON m.brand_id = b.brand_id
+        LEFT JOIN status s ON m.status_id = s.status_id
+        LEFT JOIN motorlicenses l ON m.motorlicense_id = l.motorlicense_id
+        $columnSql";
+
+        try {
+            return $this->dbh->run($query)->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Failed to fetch motors sorted: ' . $e->getMessage());
+            return [];
+        }
+    }
 }

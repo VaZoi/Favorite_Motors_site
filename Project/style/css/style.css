@@ -226,7 +226,6 @@ body {
 
 .tableView .product-cell {
   flex: 1;
-  padding: 8px 16px;
   color: var(--app-content-main-color);
   font-size: 14px;
   display: flex;
@@ -241,42 +240,20 @@ body {
   object-fit: contain;
 }
 
-@media screen and (max-width: 780px) {
-  .tableView .product-cell {
-    font-size: 12px;
-  }
-  
-  .tableView .product-cell.image span {
-    display: none;
-  }
-  
-  .tableView .product-cell.image {
-    flex: 0.2;
-  }
+/* Sortable headers match other headers */
+.products-header .product-cell a {
+  color: var(--app-content-main-color);
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 8px 16px;
+  cursor: pointer;
 }
 
-@media screen and (max-width: 520px) {
-  .tableView .product-cell.category, .tableView .product-cell.sales {
-    display: none;
-  }
-  
-  .tableView .product-cell.status-cell {
-    flex: 0.4;
-  }
-  
-  .tableView .product-cell.stock, .tableView .product-cell.price {
-    flex: 0.2;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .tableView .product-cell.stock {
-    display: none;
-  }
-  
-  .tableView .product-cell.price {
-    flex: 0.4;
-  }
+.products-header .product-cell a:hover {
+  background-color: var(--app-content-secondary-color);
+  border-radius: 4px;
 }
 
 .status {
@@ -332,4 +309,42 @@ body {
 
 .tableView .product-cell svg {
   margin: 5px;
+}
+
+@media screen and (max-width: 780px) {
+  .tableView .product-cell {
+    font-size: 12px;
+  }
+  
+  .tableView .product-cell.image span {
+    display: none;
+  }
+  
+  .tableView .product-cell.image {
+    flex: 0.2;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .tableView .product-cell.category, .tableView .product-cell.sales {
+    display: none;
+  }
+  
+  .tableView .product-cell.status-cell {
+    flex: 0.4;
+  }
+  
+  .tableView .product-cell.stock, .tableView .product-cell.price {
+    flex: 0.2;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .tableView .product-cell.stock {
+    display: none;
+  }
+  
+  .tableView .product-cell.price {
+    flex: 0.4;
+  }
 }
