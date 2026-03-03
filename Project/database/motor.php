@@ -185,7 +185,7 @@ class Motor
 
     public function searchMotors($searchTerm, $column = '', $order = 'ASC')
     {
-        $allowedSortColumns = ['weight', 'seat_height', 'price'];
+        $allowedSortColumns = ['weight', 'seat_height', 'price', 'likes'];
         $columnSql = in_array($column, $allowedSortColumns) ? "ORDER BY $column $order" : "ORDER BY m.likes DESC";
 
         $query = "
@@ -246,7 +246,7 @@ class Motor
 
     public function getMotorsSorted($column, $order)
     {
-        $allowedSortColumns = ['weight', 'seat_height', 'price'];
+        $allowedSortColumns = ['weight', 'seat_height', 'price', 'likes'];
         $columnSql = in_array($column, $allowedSortColumns) ? "ORDER BY $column $order" : "ORDER BY likes DESC";
 
         $query = "

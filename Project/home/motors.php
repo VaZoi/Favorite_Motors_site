@@ -13,7 +13,7 @@ $statuses = $other->getStatuses();
 $sortColumn = $_GET['sort'] ?? '';
 $sortOrder = $_GET['order'] ?? 'ASC';
 
-$allowedSortColumns = ['weight', 'seat_height', 'price'];
+$allowedSortColumns = ['weight', 'seat_height', 'price', 'likes'];
 $allowedSortOrders = ['ASC', 'DESC'];
 
 if (!in_array($sortColumn, $allowedSortColumns)) $sortColumn = '';
@@ -74,7 +74,7 @@ function sortLink($column, $label) {
             <div class="app-content-actions">
                 <div class="products-area-wrapper tableView">
                     <div class="products-header">
-                        <div class="product-cell stock">Likes</div>
+                        <div class="product-cell stock"><?php echo sortLink('likes', 'Likes'); ?></div>
                         <div class="product-cell image">Image</div>
                         <div class="product-cell stock">Name</div>
                         <div class="product-cell category">Category</div>
