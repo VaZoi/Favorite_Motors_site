@@ -9,6 +9,7 @@ if (isset($_GET['id'])) {
     $motor_id = $_GET['id'];
 
     $motor_details = $motor->getMotorById($motor_id);
+    $price_history = $motor->getPriceHistory($motor_id);
     if (!$motor_details) {
         die("Error: Motor not found.");
     }
@@ -28,6 +29,7 @@ if (isset($_GET['id'])) {
     <link rel="stylesheet" href="../style/css/view_motor.css">
     <script src="../style/javascript/navbar.js" defer></script>
     <script src="../style/javascript/view_motor.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <div class="app-container">
@@ -60,6 +62,8 @@ if (isset($_GET['id'])) {
                 <p>No images available for this motor.</p>
             <?php endif; ?>
         </div>
+        <h3 class="descript">Price History</h3>
+        <canvas id="priceChart" width="400" height="200"></canvas>
     </div>
 </div>
 <div id="myModal" class="modal">
@@ -67,5 +71,34 @@ if (isset($_GET['id'])) {
   <img class="modal-content" id="img01">
   <div id="caption"></div>
 </div>
+<script>
+const priceData = <?php echo json_encode($price_history); ?>;
+
+const labels = priceData.map(item => new Date(item.recorded_at).toLocaleDateString());
+const prices = priceData.map(item => item.price);
+
+const ctx = document.getElementById('priceChart');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Motor Price (€)',
+            data: prices,
+            borderWidth: 2,
+            tension: 0.2
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: false
+            }
+        }
+    }
+});
+</script>
 </body>
 </html>

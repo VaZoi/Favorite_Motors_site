@@ -45,8 +45,8 @@ class Motor
     public function addMotor($name, $category_id, $status_id, $brand_id, $motorlicense_id, $cc, $pk, $kw, $seat_height, $weight, $price)
     {
         $query = "
-            INSERT INTO $this->motortable (name, category_id, status_id, brand_id, motorlicense_id, cc, pk, kw, seat_height, weight, price)
-            VALUES (:name, :category_id, :status_id, :brand_id, :motorlicense_id, :cc, :pk, :kw, :seat_height, :weight, :price)";
+    INSERT INTO $this->motortable (name, category_id, status_id, brand_id, motorlicense_id, cc, pk, kw, seat_height, weight, price)
+    VALUES (:name, :category_id, :status_id, :brand_id, :motorlicense_id, :cc, :pk, :kw, :seat_height, :weight, :price)";
 
         $params = [
             ':name' => $name,
@@ -62,7 +62,87 @@ class Motor
             ':price' => $price,
         ];
 
-        return $this->dbh->run($query, $params);
+        try {
+            $this->dbh->run($query, $params);
+            $motor_id = $this->dbh->lastInsertId();  // get the new motor ID
+
+            // Add price history only if not exists for today
+            $lastPrice = $this->getLastPrice($motor_id);
+            if ($lastPrice === null || $lastPrice != $price) {
+                $this->addPriceHistory($motor_id, $price);
+            }
+
+            return $motor_id;
+        } catch (PDOException $e) {
+            error_log('Failed to add motor: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function updateMotor($motor_id, $name, $category_id, $status_id, $brand_id, $motorlicense_id, $cc, $pk, $kw, $seat_height, $weight, $price)
+    {
+        $query = "
+    UPDATE $this->motortable 
+    SET name = :name, 
+        category_id = :category_id, 
+        status_id = :status_id, 
+        brand_id = :brand_id, 
+        motorlicense_id = :motorlicense_id, 
+        cc = :cc, 
+        pk = :pk, 
+        kw = :kw, 
+        seat_height = :seat_height, 
+        weight = :weight, 
+        price = :price
+    WHERE motor_id = :motor_id";
+
+        $params = [
+            ':motor_id' => $motor_id,
+            ':name' => $name,
+            ':category_id' => $category_id,
+            ':status_id' => $status_id,
+            ':brand_id' => $brand_id,
+            ':motorlicense_id' => $motorlicense_id,
+            ':cc' => $cc,
+            ':pk' => $pk,
+            ':kw' => $kw,
+            ':seat_height' => $seat_height,
+            ':weight' => $weight,
+            ':price' => $price,
+        ];
+
+        try {
+            $this->dbh->run($query, $params);
+
+            // Add price to history only if different from last recorded
+            $lastPrice = $this->getLastPrice($motor_id);
+            if ($lastPrice === null || $lastPrice != $price) {
+                $this->addPriceHistory($motor_id, $price);
+            }
+
+            return true;
+        } catch (PDOException $e) {
+            error_log('Failed to update motor: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Get the last recorded price of a motor
+     */
+    public function getLastPrice($motor_id)
+    {
+        $query = "SELECT price FROM motor_price_history WHERE motor_id = :motor_id ORDER BY recorded_at DESC LIMIT 1";
+        $params = [':motor_id' => $motor_id];
+
+        try {
+            $stmt = $this->dbh->run($query, $params);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result ? $result['price'] : null;
+        } catch (PDOException $e) {
+            error_log('Failed to get last price: ' . $e->getMessage());
+            return null;
+        }
     }
 
     public function getMotorById($motor_id)
@@ -97,47 +177,6 @@ class Motor
         } catch (PDOException $e) {
             error_log('Failed to count motors: ' . $e->getMessage());
             return 0;
-        }
-    }
-
-    public function updateMotor($motor_id, $name, $category_id, $status_id, $brand_id, $motorlicense_id, $cc, $pk, $kw, $seat_height, $weight, $price)
-    {
-        $query = "
-            UPDATE $this->motortable 
-            SET name = :name, 
-                category_id = :category_id, 
-                status_id = :status_id, 
-                brand_id = :brand_id, 
-                motorlicense_id = :motorlicense_id, 
-                cc = :cc, 
-                pk = :pk, 
-                kw = :kw, 
-                seat_height = :seat_height, 
-                weight = :weight, 
-                price = :price
-            WHERE motor_id = :motor_id";
-
-        $params = [
-            ':motor_id' => $motor_id,
-            ':name' => $name,
-            ':category_id' => $category_id,
-            ':status_id' => $status_id,
-            ':brand_id' => $brand_id,
-            ':motorlicense_id' => $motorlicense_id,
-            ':cc' => $cc,
-            ':pk' => $pk,
-            ':kw' => $kw,
-            ':seat_height' => $seat_height,
-            ':weight' => $weight,
-            ':price' => $price,
-        ];
-
-        try {
-            $stmt = $this->dbh->run($query, $params);
-            return true;
-        } catch (PDOException $e) {
-            error_log('Failed to update motor: ' . $e->getMessage());
-            return false;
         }
     }
 
@@ -262,6 +301,37 @@ class Motor
             return $this->dbh->run($query)->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log('Failed to fetch motors sorted: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function addPriceHistory($motor_id, $price)
+    {
+        $query = "INSERT INTO motor_price_history (motor_id, price) VALUES (:motor_id, :price)";
+        $params = [
+            ':motor_id' => $motor_id,
+            ':price' => $price
+        ];
+
+        try {
+            $this->dbh->run($query, $params);
+            return true;
+        } catch (PDOException $e) {
+            error_log('Failed to add price history: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function getPriceHistory($motor_id)
+    {
+        $query = "SELECT price, recorded_at FROM motor_price_history WHERE motor_id = :motor_id ORDER BY recorded_at ASC";
+        $params = [':motor_id' => $motor_id];
+
+        try {
+            $stmt = $this->dbh->run($query, $params);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Failed to fetch price history: ' . $e->getMessage());
             return [];
         }
     }

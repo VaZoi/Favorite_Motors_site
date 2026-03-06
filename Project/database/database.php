@@ -32,5 +32,13 @@ class Database
         $stmt->execute($args);
         return $stmt;
     }
+
+    /**
+     * Get the last inserted ID
+     */
+    public function lastInsertId(): string
+    {
+        return $this->dbh->lastInsertId();
+    }
 }
 
