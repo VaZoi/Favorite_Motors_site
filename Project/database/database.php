@@ -14,7 +14,7 @@ class Database
         $this->host = 'localhost';
         $this->username = 'root';
         $this->password = '';
-        $this->database = 'php_FavoriteMotors';
+        $this->database = 'php_favoritemotors';
         $this->port = 3306;
         
         $dsn = "mysql:host=$this->host;port=$this->port;dbname=$this->database";
@@ -31,6 +31,14 @@ class Database
         $stmt = $this->dbh->prepare($query);
         $stmt->execute($args);
         return $stmt;
+    }
+
+    /**
+     * Get the last inserted ID
+     */
+    public function lastInsertId(): string
+    {
+        return $this->dbh->lastInsertId();
     }
 }
 
